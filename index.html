@@ -1,97 +1,79 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Data Entry Portal</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body { padding: 20px; }
-        .tab-content > .tab-pane { padding-top: 20px; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AV Data Entry Portal</title>
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<div class="container">
-    <h2>Data Entry Portal</h2>
-    <ul class="nav nav-tabs" id="entryTabs" role="tablist">
-        <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="single-tab" data-bs-toggle="tab" data-bs-target="#single" type="button" role="tab">Single Entry</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="bulk-tab" data-bs-toggle="tab" data-bs-target="#bulk" type="button" role="tab">Bulk Upload</button>
-        </li>
-    </ul>
-    <div class="tab-content" id="entryTabsContent">
-        <div class="tab-pane fade show active" id="single" role="tabpanel">
-            <form id="dataForm">
-                <div class="row mt-3">
-                    <div class="col-md-6"><input type="text" class="form-control mb-2" name="Vendor" placeholder="Vendor" required></div>
-                    <div class="col-md-6"><input type="date" class="form-control mb-2" name="Date_All" required></div>
-                    <div class="col-md-6"><input type="text" class="form-control mb-2" name="Type_Verification" placeholder="Type Verification" required></div>
-                    <div class="col-md-6"><input type="text" class="form-control mb-2" name="Client" placeholder="Client" required></div>
-                    <div class="col-md-6"><input type="text" class="form-control mb-2" name="Resume_id" placeholder="Resume ID" required></div>
-                    <div class="col-md-6"><input type="text" class="form-control mb-2" name="Candidate_name" placeholder="Candidate Name" required></div>
-                    <div class="col-md-6"><input type="text" class="form-control mb-2" name="Address" placeholder="Address"></div>
-                    <div class="col-md-6"><input type="text" class="form-control mb-2" name="Pincode" placeholder="Pincode"></div>
-                    <div class="col-md-6"><input type="text" class="form-control mb-2" name="City" placeholder="City"></div>
-                    <div class="col-md-6"><input type="text" class="form-control mb-2" name="contact1" placeholder="Contact 1"></div>
-                    <div class="col-md-6"><input type="text" class="form-control mb-2" name="contact2" placeholder="Contact 2"></div>
-                    <div class="col-md-6"><input type="text" class="form-control mb-2" name="Executives" placeholder="Executives"></div>
-                    <div class="col-md-6"><input type="text" class="form-control mb-2" name="Status" placeholder="Status"></div>
-                    <div class="col-md-6"><input type="date" class="form-control mb-2" name="Closing_Date"></div>
-                    <div class="col-md-6"><input type="text" class="form-control mb-2" name="Process_Owner" placeholder="Process Owner"></div>
-                    <div class="col-md-6"><input type="text" class="form-control mb-2" name="Billing_Status" placeholder="Billing Status"></div>
-                    <div class="col-md-6"><input type="number" step="0.01" class="form-control mb-2" name="Client_Price" placeholder="Client Price"></div>
-                    <div class="col-md-6"><input type="number" step="0.01" class="form-control mb-2" name="Exe_Price" placeholder="Exe Price"></div>
-                </div>
-                <button type="submit" class="btn btn-primary mt-2">Submit</button>
-            </form>
-            <div id="formMsg" class="mt-3"></div>
-        </div>
-        <div class="tab-pane fade" id="bulk" role="tabpanel">
-            <input type="file" id="csvFile" accept=".csv" class="form-control mt-3 mb-2">
-            <button onclick="uploadCSV()" class="btn btn-success">Upload CSV</button>
-            <div id="bulkMsg" class="mt-3"></div>
-        </div>
-    </div>
-</div>
-<script>
-    document.getElementById('dataForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const formData = new FormData(this);
-        const data = {};
-        formData.forEach((value, key) => data[key] = value);
-        fetch('https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec', {
-            method: 'POST',
-            body: JSON.stringify(data)
-        })
-        .then(res => res.text())
-        .then(data => {
-            document.getElementById('formMsg').innerHTML = '<div class="alert alert-success">Submitted Successfully!</div>';
-            this.reset();
-        }).catch(err => {
-            document.getElementById('formMsg').innerHTML = '<div class="alert alert-danger">Error occurred.</div>';
-        });
-    });
+  <div class="container">
+    <img src="Logo.png" alt="Logo" class="logo"/>
+    <h2>Login</h2>
+    <input type="text" id="username" placeholder="Username" />
+    <input type="password" id="password" placeholder="Password" />
+    <button onclick="login()">Login</button>
 
-    function uploadCSV() {
-        const file = document.getElementById('csvFile').files[0];
-        if (!file) return alert("Please select a CSV file");
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            fetch('https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec', {
-                method: 'POST',
-                body: JSON.stringify({bulk: true, csv: e.target.result})
-            })
-            .then(res => res.text())
-            .then(data => {
-                document.getElementById('bulkMsg').innerHTML = '<div class="alert alert-success">Bulk Upload Successful!</div>';
-            }).catch(err => {
-                document.getElementById('bulkMsg').innerHTML = '<div class="alert alert-danger">Error occurred during bulk upload.</div>';
-            });
-        };
-        reader.readAsText(file);
+    <h2>Single Entry</h2>
+    <form id="entryForm">
+      <input type="text" placeholder="Vendor" name="Vendor" required />
+      <input type="date" name="Date_All" required />
+      <input type="text" placeholder="Type Verification" name="Type_Verification" required />
+      <input type="text" placeholder="Client" name="Client" />
+      <input type="text" placeholder="Resume ID" name="Resume_id" />
+      <input type="text" placeholder="Candidate Name" name="Candidate_name" />
+      <input type="text" placeholder="Address" name="Address" />
+      <input type="text" placeholder="Pincode" name="Pincode" />
+      <input type="text" placeholder="City" name="City" />
+      <input type="text" placeholder="Contact 1" name="contact1" />
+      <input type="text" placeholder="Contact 2" name="contact2" />
+      <input type="text" placeholder="Executives" name="Executives" />
+      <input type="text" placeholder="Status" name="Status" />
+      <input type="date" name="Closing_Date" />
+      <input type="text" placeholder="Process Owner" name="Process_Owner" />
+      <input type="text" placeholder="Billing Status" name="Billing_Status" />
+      <input type="number" placeholder="Client Price" name="Client_Price" />
+      <input type="number" placeholder="Exe Price" name="Exe_Price" />
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+
+  <script>
+    const scriptURL = "https://script.google.com/macros/s/AKfycbySfRU0zjxslIF9rHfCVeepdZAUe5wHFtxn2dkTDfs/dev";
+
+    function login() {
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+
+      fetch(scriptURL, {
+        method: "POST",
+        body: JSON.stringify({ login: true, username, password })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          alert("Login successful!");
+        } else {
+          alert("Invalid credentials.");
+        }
+      })
+      .catch(err => alert("Login error: " + err));
     }
-</script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    document.getElementById("entryForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const data = Object.fromEntries(formData.entries());
+
+      fetch(scriptURL, {
+        method: "POST",
+        body: JSON.stringify(data)
+      })
+      .then(response => response.text())
+      .then(result => alert(result))
+      .catch(error => alert("Submit error: " + error));
+    });
+  </script>
 </body>
 </html>
